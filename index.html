@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>2026年3月计算机二级C语言真题系统</title>
+<style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft Yahei",sans-serif;}
+    body{background:#f0f2f5;padding:20px;}
+    .container{max-width:950px;margin:0 auto;background:#fff;padding:25px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+    .title{text-align:center;font-size:26px;margin-bottom:10px;color:#222;}
+    .sub{text-align:center;color:#666;margin-bottom:30px;line-height:1.6;}
+    /* 倒计时样式 */
+    #timer{color:red;font-size:18px;font-weight:bold;margin-top:8px;display:inline-block;}
+    
+    .tab{display:inline-block;padding:12px 22px;background:#eee;cursor:pointer;margin-right:2px;border-radius:6px 6px 0 0;}
+    .tab.active{background:#005ea5;color:#fff;}
+    
+    .question-box{min-height:480px;padding:25px;border:1px solid #ddd;border-radius:6px;background:#fff;margin-top:10px;}
+    .q-num{font-size:18px;font-weight:bold;margin-bottom:15px;color:#005ea5;}
+    .q-content{line-height:1.9;margin-bottom:20px;white-space:pre-line;font-size:15px;}
+    
+    .opt{padding:12px;border:1px solid #ccc;border-radius:6px;margin:10px 0;cursor:pointer;}
+    .opt.right{background:#28a745;color:#fff;}
+    .opt.wrong{background:#dc3545;color:#fff;}
+    
+    input{width:220px;padding:8px;margin:6px 0;font-family:Consolas;}
+    textarea{width:100%;height:160px;margin-top:10px;font-family:Consolas;}
+    
+    .tip{margin-top:15px;padding:12px;border-radius:6px;white-space:pre-line;line-height:1.7;}
+    .tip.right{background:#d4edda;color:#155724;border:1px solid #c3e6cb;}
+    .tip.wrong{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;}
+    
+    .btn{padding:10px 22px;margin:6px;background:#005ea5;color:#fff;border:none;border-radius:6px;cursor:pointer;}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <div class="title">2026年3月全国计算机二级C语言真题</div>
+    <div class="sub">
+        考试时长：120分钟 | 满分：100分<br>
+        选择题(40题) | 填空(18分) | 改错(18分) | 编程(24分)<br>
+        <!-- 倒计时显示区域 -->
+        <span id="timer">剩余时间：120:00</span>
+    </div>
+
+    <div>
+        <div class="tab active" onclick="switchTab('select')">单项选择题</div>
+        <div class="tab" onclick="switchTab('fill')">程序填空题</div>
+        <div class="tab" onclick="switchTab('error')">程序改错题</div>
+        <div class="tab" onclick="switchTab('design')">程序设计题</div>
+    </div>
+
+    <div class="question-box" id="box"></div>
+
+    <div>
+        <button class="btn" onclick="prev()">上一题</button>
+        <button class="btn" onclick="next()">下一题</button>
+        <button class="btn" onclick="submit()">提交答案</button>
+        <button class="btn" onclick="showAns()">查看全部答案</button>
+    </div>
+</div>
+
+<script>
+var data = {
+    select: [
+        {q:"1. 下列叙述中正确的是（）",opt:["A. C语言源程序无需编译即可运行","B. C程序总是从main函数开始执行","C. main函数必须放在程序的最前面","D. C程序中所有函数都可以自定义"],ans:"B"},
+        {q:"2. 下列选项中，属于C语言合法标识符的是（）",opt:["A. 123abc","B. int","C. _name","D. a-b"],ans:"C"},
+        {q:"3. C语言中，char类型变量占用的内存字节数是（）",opt:["A. 1","B. 2","C. 4","D. 8"],ans:"A"},
+        {q:"4. 已知int a=9,b=2;，则表达式a/b的结果是（）",opt:["A. 4.5","B. 4","C. 5","D. 2"],ans:"B"},
+        {q:"5. 下列各项中，不属于常量的是（）",opt:["A. 0x12","B. 3.1415","C. 'M'","D. abc"],ans:"D"},
+        {q:"6. 已知int x=6;，执行x+=x-=x*x;后，x的值为（）",opt:["A. 36","B. -60","C. 24","D. -12"],ans:"B"},
+        {q:"7. 关于switch语句，下列说法正确的是（）",opt:["A. switch语句中必须包含default语句","B. case后的常量表达式可以重复","C. break语句可以省略，省略后会穿透执行","D. switch后的表达式可以是浮点型"],ans:"C"},
+        {q:"8. 循环语句for(i=0;i<5;i++)，循环体执行的次数为（）",opt:["A. 4次","B. 5次","C. 6次","D. 无限次"],ans:"B"},
+        {q:"9. C语言中一维数组的下标起始值为（）",opt:["A. 1","B. 0","C. 2","D. 自定义"],ans:"B"},
+        {q:"10. 字符串\"computer\"在内存中所占字节数为（）",opt:["A. 8","B. 9","C. 7","D. 10"],ans:"B"},
+        {q:"11. 下列关于指针的叙述正确的是（）",opt:["A. 指针变量存放的是内存地址","B. 可以直接给指针赋整型数值","C. 指针不需要定义即可使用","D. 所有指针类型完全通用"],ans:"A"},
+        {q:"12. C语言普通变量作为函数实参时，默认的传递方式是（）",opt:["A. 地址传递","B. 值传递","C. 双向传递","D. 引用传递"],ans:"B"},
+        {q:"13. 下列函数中，不属于字符串处理函数的是（）",opt:["A. strlen()","B. strcpy()","C. scanf()","D. strcat()"],ans:"C"},
+        {q:"14. 定义int a[5]={1,2,3};，则数组元素a[4]的值为（）",opt:["A. 3","B. 0","C. 4","D. 随机值"],ans:"B"},
+        {q:"15. 关于结构体struct，下列叙述正确的是（）",opt:["A. 结构体只能包含一种数据类型","B. 结构体成员变量不能同名","C. 结构体占用内存为所有成员大小之和","D. 结构体不允许嵌套定义"],ans:"C"},
+        {q:"16. fopen函数中，以只读方式打开文本文件的格式字符串是（）",opt:["A. \"w\"","B. \"r\"","C. \"a\"","D. \"wb\""],ans:"B"},
+        {q:"17. 动态内存分配函数malloc()的返回值类型是（）",opt:["A. int *","B. void *","C. char *","D. float *"],ans:"B"},
+        {q:"18. 运行下列程序，输出结果为（）\n#include<stdio.h>\nint main(){\n    int i,sum=0;\n    for(i=1;i<=6;i++) sum+=i;\n    printf(\"%d\",sum);\n}",opt:["A. 15","B. 21","C. 25","D. 36"],ans:"B"},
+        {q:"19. 下列运算符中优先级最高的是（）",opt:["A. +","B. *","C. &&","D. ="],ans:"B"},
+        {q:"20. 已知char c='a';，则表达式c-32的值为（）",opt:["A. 97","B. 65","C. 32","D. 0"],ans:"B"},
+        {q:"21. 下列不属于C语言关键字的是（）",opt:["A. if","B. while","C. printf","D. return"],ans:"C"},
+        {q:"22. 循环语句while(!x)，条件为真时，x的值为（）",opt:["A. 0","B. 非0","C. 1","D. -1"],ans:"A"},
+        {q:"23. 定义二维数组int a[3][2];，该数组总元素个数为（）",opt:["A. 3","B. 2","C. 5","D. 6"],ans:"D"},
+        {q:"24. 函数返回类型为void，表示（）",opt:["A. 返回整数0","B. 函数无返回值","C. 返回字符型数据","D. 返回任意类型数据"],ans:"B"},
+        {q:"25. 下列正确的字符串初始化方式是（）",opt:["A. char a[5]=\"hello\";","B. char a[]=\"hello\";","C. char a[5]={'h','e'};","D. char a=\"hello\";"],ans:"B"},
+        {q:"26. 已知int a=2,b=5;，则条件运算符a>b?a:b的结果是（）",opt:["A. 2","B. 5","C. 0","D. -1"],ans:"B"},
+        {q:"27. break语句在循环中的作用是（）",opt:["A. 结束本次循环，直接进入下一次","B. 跳出整个循环结构","C. 直接结束整个程序","D. 跳出if选择语句"],ans:"B"},
+        {q:"28. continue语句的作用是（）",opt:["A. 终止整个循环","B. 跳过本次循环剩余语句，进入下一次循环","C. 退出当前函数","D. 无任何作用"],ans:"B"},
+        {q:"29. C语言全局变量的作用域是（）",opt:["A. 仅限于所在函数","B. 整个源程序","C. 仅限于所在源文件","D. 自定义范围"],ans:"C"},
+        {q:"30. 关于文件操作，下列叙述正确的是（）",opt:["A. 打开的文件使用完毕后必须用fclose关闭","B. 程序退出时文件可以不用关闭","C. 同一个文件可以无限次重复关闭","D. 关闭文件会清空文件原有内容"],ans:"A"},
+        {q:"31. 逻辑表达式4 && 6的运算结果是（）",opt:["A. 0","B. 1","C. 4","D. 6"],ans:"B"},
+        {q:"32. 逻辑表达式5 || 0的运算结果是（）",opt:["A. 0","B. 1","C. 5","D. 报错"],ans:"B"},
+        {q:"33. 已知int a=16;，则a>>2的结果是（）",opt:["A. 4","B. 8","C. 32","D. 64"],ans:"A"},
+        {q:"34. 共用体union的内存占用特点是（）",opt:["A. 所有成员内存总和","B. 占用最大成员的内存空间","C. 固定占用4字节","D. 内存大小随机"],ans:"B"},
+        {q:"35. 运行下列程序，输出结果为（）\n#include<stdio.h>\nvoid swap(int x,int y){int t=x;x=y;y=t;}\nint main(){int a=3,b=5;swap(a,b);printf(\"%d %d\",a,b);}",opt:["A. 3 5","B. 5 3","C. 0 0","D. 随机数"],ans:"A"},
+        {q:"36. 定义int *p;，指针变量p中存放的是（）",opt:["A. 整型数值","B. 整型变量的内存地址","C. 字符变量地址","D. 无意义地址"],ans:"B"},
+        {q:"37. 数组名作为函数实参时，传递的是（）",opt:["A. 数组所有元素的值","B. 数组首元素的地址","C. 数组的长度","D. 数组最后一个元素"],ans:"B"},
+        {q:"38. 下列变量定义语句正确的是（）",opt:["A. int a,b=c=5;","B. int a=5,b=a;","C. int a[];","D. float x=y=3.14;"],ans:"B"},
+        {q:"39. 下列选项中，不属于算法基本特征的是（）",opt:["A. 有穷性","B. 确定性","C. 无限循环","D. 可行性"],ans:"C"},
+        {q:"40. 下列软件中，不属于系统软件的是（）",opt:["A. Windows操作系统","B. C语言编译程序","C. Word文字处理软件","D. 系统内核程序"],ans:"C"}
+    ],
+    fill: [
+        {q:`程序功能：计算 1+3+5+7+…+n 奇数和
+#include <stdio.h>
+long fun(int n)
+{
+    int i;
+    long sum = ___(1)___;
+    for(i=1; ___(2)___; i+=2)
+    {
+        sum += ___(3)___;
+    }
+    return sum;
+}
+int main()
+{
+    int n;
+    scanf("%d",&n);
+    printf("%ld\n",fun(n));
+}`,ans:["0","i <= n","i"]}
+    ],
+    error: [
+        {q:`程序功能：输入两个整数，输出较小值（共2处错误）
+#include <stdio.h>
+int min(int a,b)
+{
+    if(a<b) return a;
+    else return b;
+}
+int main()
+{
+    int x,y;
+    scanf("%d%d",x,y);
+    printf("%d",min(x,y));
+}`,ans:["int min(int a,int b)","scanf(\"%d%d\",&x,&y);"]}
+    ],
+    design: [
+        {q:`程序设计题：
+编写函数fun，统计字符串中大写字母(A~Z)个数并返回。
+主函数输入字符串，调用fun并输出结果。`,ans:`#include <stdio.h>
+#include <string.h>
+int fun(char str[])
+{
+    int i, count = 0;
+    int len = strlen(str);
+    for(i=0; i<len; i++){
+        if(str[i]>='A' && str[i]<='Z') count++;
+    }
+    return count;
+}
+int main()
+{
+    char s[100];
+    gets(s);
+    printf("%d",fun(s));
+    return 0;
+}`}
+    ]
+};
+
+var now = "select";
+var idx = 0;
+
+// ===================== 倒计时核心代码 =====================
+var totalSeconds = 120 * 60; // 120分钟 = 7200秒
+var timerInterval;
+var examEnd = false;
+
+// 格式化时间（分:秒，不足补0）
+function formatTime(t) {
+    let m = Math.floor(t / 60);
+    let s = t % 60;
+    return m.toString().padStart(2, '0') + ":" + s.toString().padStart(2, '0');
+}
+
+// 启动倒计时
+function startTimer() {
+    timerInterval = setInterval(() => {
+        if(totalSeconds <= 0){
+            clearInterval(timerInterval);
+            examEnd = true;
+            document.getElementById("timer").innerText = "考试已结束！";
+            alert("考试时间已结束！");
+            return;
+        }
+        totalSeconds--;
+        document.getElementById("timer").innerText = "剩余时间：" + formatTime(totalSeconds);
+    }, 1000);
+}
+
+// 页面加载自动启动倒计时
+window.onload = function(){
+    startTimer();
+    render();
+};
+// ==========================================================
+
+function $(id){ return document.getElementById(id); }
+
+function render(){
+    // 考试结束禁止答题
+    if(examEnd){
+        $("box").innerHTML = "<div style='text-align:center;color:red;font-size:20px;'>考试已结束，无法答题</div>";
+        return;
+    }
+    var d = data[now][idx];
+    var html = "<div class='q-num'>第"+(idx+1)+"题</div>";
+    html += "<div class='q-content'>"+d.q+"</div>";
+
+    if(now == "select"){
+        for(var i=0;i<d.opt.length;i++){
+            html += "<div class='opt' onclick='choose("+i+")'>"+d.opt[i]+"</div>";
+        }
+    }
+    if(now == "fill"){
+        html += "(1) <input id='b1'><br>";
+        html += "(2) <input id='b2'><br>";
+        html += "(3) <input id='b3'><br>";
+    }
+    if(now == "error"){
+        html += "错误1改正：<input id='e1'><br>";
+        html += "错误2改正：<input id='e2'><br>";
+    }
+    if(now == "design"){
+        html += "<textarea id='code'></textarea>";
+    }
+
+    html += "<div id='tip' class='tip'></div>";
+    document.getElementById("box").innerHTML = html;
+}
+
+function choose(i){
+    if(examEnd) return;
+    var d = data[now][idx];
+    var opts = document.getElementsByClassName("opt");
+    var ans = d.ans;
+    var user = "ABCD"[i];
+    for(var o=0;o<opts.length;o++) opts[o].className="opt";
+    if(user == ans){
+        opts[i].className="opt right";
+        showTip("right","✅ 回答正确！");
+    }else{
+        opts[i].className="opt wrong";
+        showTip("wrong","❌ 错误，正确答案："+ans);
+    }
+}
+
+function submit(){
+    if(examEnd) return;
+    var d = data[now][idx];
+    if(now == "select"){
+        showTip("wrong","选择题请直接点击选项！");
+        return;
+    }
+    if(now == "fill"){
+        var a = document.getElementById("b1").value.trim();
+        var b = document.getElementById("b2").value.trim();
+        var c = document.getElementById("b3").value.trim();
+        if(a==d.ans[0]&&b==d.ans[1]&&c==d.ans[2]){
+            showTip("right","✅ 填空题全部正确！");
+        }else{
+            showTip("wrong","❌ 错误，正确：\n(1) "+d.ans[0]+"\n(2) "+d.ans[1]+"\n(3) "+d.ans[2]);
+        }
+    }
+    if(now == "error"){
+        var e1 = document.getElementById("e1").value.trim();
+        var e2 = document.getElementById("e2").value.trim();
+        if(e1==d.ans[0]&&e2==d.ans[1]){
+            showTip("right","✅ 改错题全部正确！");
+        }else{
+            showTip("wrong","❌ 正确答案：\n1. "+d.ans[0]+"\n2. "+d.ans[1]);
+        }
+    }
+    if(now == "design"){
+        showTip("right","✅ 已提交！标准答案：\n"+d.ans);
+    }
+}
+
+function showTip(t,msg){
+    var tip = document.getElementById("tip");
+    tip.className = "tip "+t;
+    tip.innerText = msg;
+}
+
+function switchTab(t){
+    if(examEnd) return;
+    now = t; idx = 0;
+    var tabs = document.getElementsByClassName("tab");
+    for(var i=0;i<tabs.length;i++) tabs[i].className="tab";
+    tabs[now=="select"?0:now=="fill"?1:now=="error"?2:3].className+=" active";
+    render();
+}
+
+function prev(){ if(idx>0 && !examEnd){idx--;render();} }
+function next(){ if(idx<data[now].length-1 && !examEnd){idx++;render();} }
+function showAns(){ 
+    alert(`=== 2026年3月真题 全部标准答案 ===
+【选择题 1-40】
+B C A B D  B C B B B  A B C B C  B B B B B
+C A D B B  B B B C A  B B A B A  B B B C C
+
+【填空题】
+(1) 0
+(2) i <= n
+(3) i
+
+【改错题】
+1. int min(int a,int b)
+2. scanf("%d%d",&x,&y);
+
+【程序设计题】
+完整代码见题目内标准答案`); 
+}
+</script>
+</body>
+</html>
